@@ -10,6 +10,7 @@ class MenuItem(models.Model):
     description=models.TextField()
     image=models.ImageField(upload_to ='menu_images/')
     price=models.DecimalField(max_digits=5,decimal_places=2)
+    category=models.ManyToManyField('Category', related_name='item')
 
     """
     adding an str method to make it look more better
