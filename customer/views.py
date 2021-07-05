@@ -7,4 +7,13 @@ class Index(View):
 class About(View):
     def get(self,request,*args,**kwargs):
         return render(request,'customer/about.html')
+"""
+Building a view for the Actual Order Screen
+"""
+class Order(View):
+    def get(self,request,*args,**kwargs):
+        pass
+   
+
+        
 
