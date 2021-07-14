@@ -12,52 +12,56 @@ class About(View):
 Building a view for the Actual Order Screen
 """
 class Order(View):
-    def get(self,request,*args,**kwargs):
-        appetizers=MenuItem.objects.filter(category_name_contains='Appetizers')
-        entres=MenuItem.objects.filter(category_name_contains='Dessert')
-        desserts=MenuItem.objects.filter(category_name_contains='Entre')
-        drinks=MenuItem.objects.filter(category_name_contains='Drink')
+    def get(self, request, *args, **kwargs):
+        # get every item from each category
+        appetizers = MenuItem.objects.filter(
+            category__name__contains='Appetizer')
+        entres = MenuItem.objects.filter(category__name__contains='Entre')
+        desserts = MenuItem.objects.filter(category__name__contains='Dessert')
+        drinks = MenuItem.objects.filter(category__name__contains='Drink')
 
-        context={
-            'appetizers':appetizers,
-            'desserts':desserts,
-            'entres':entres,
-            'drinks':drinks
-
-
+        # pass into context
+        context = {
+            'appetizers': appetizers,
+            'entres': entres,
+            'desserts': desserts,
+            'drinks': drinks,
         }
 
-        return render(request,'customer/order.html', context)
+        # render the template
+        return render(request, 'customer/order.html', context)
+
     def post(self, request, *args, **kwargs):
-        order_items={
-            'items':[]
+        order_items = {
+            'items': []
         }
-        items=request.POST.getlist('items[]')
+
+        items = request.POST.getlist('items[]')
 
         for item in items:
-            menu_item=MenuItem.objects.get(pk_contains=int(item))
-            Item_data={
-                'id':menu_item.pk,
-                'name':menu_item.name,
-                'price':menu_item.price
+            menu_item = MenuItem.objects.get(pk__contains=int(item))
+            item_data = {
+                'id': menu_item.pk,
+                'name': menu_item.name,
+                'price': menu_item.price
             }
-            order_items['items'].append(Item_data)
 
-            price = 0
-            item_ids =[]
-            for item in order_items['items']:
-                price+=item['id']
-            
-            order=OrderModel.objects.create(price=price)
-            order.items.add(item_ids)
+            order_items['items'].append(item_data)
 
-            context={
-                'Item':order_items['items'],
-                'price':price
+        price = 0
+        item_ids = []
 
-            }
-            return render(request, 'customeer/order_confirmation.html,',context)
+        for item in order_items['items']:
+            price += item['price']
+            item_ids.append(item['id'])
 
+        order = OrderModel.objects.create(price=price)
+        order.items.add(*item_ids)
 
-        
+        context = {
+            'items': order_items['items'],
+            'price': price
+        }
 
+        return render(request, 'customer/order_confirmation.html', context)
+  
