@@ -1,3 +1,4 @@
+from django.core.mail import send_mail
 from customer.models import Category, MenuItem, OrderModel
 from django.shortcuts import render
 from django.views import View
@@ -32,6 +33,14 @@ class Order(View):
         return render(request, 'customer/order.html', context)
 
     def post(self, request, *args, **kwargs):
+        """
+        Declaring all the values in the Submition Order Form
+        """
+        name=request.POST.get('name')
+        email=request.POST.get('email')
+        city=request.POST.get('city')
+        state=request.POST.get('state')
+        zipCode=request.POST.get('zipCode')
         order_items = {
             'items': []
         }
@@ -55,8 +64,27 @@ class Order(View):
             price += item['price']
             item_ids.append(item['id'])
 
-        order = OrderModel.objects.create(price=price)
+        order = OrderModel.objects.create(
+            price=price,
+            name=name,
+            email=email,
+            city=city,
+            state=state,
+            zipCode=zipCode,
+
+
+        )
         order.items.add(*item_ids)
+        body=('Thank you for your Order,your Order is being processed,you will receive it in a short while \n'
+        f'Your total is:{price}\n'
+        'Thank you again for your Order')
+        send_mail(
+            'Thank you for Your Order!',
+            body,
+            'sindetisarah@gmail.com',
+            [email],
+            
+        )
 
         context = {
             'items': order_items['items'],
