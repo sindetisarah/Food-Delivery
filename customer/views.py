@@ -1,7 +1,9 @@
 from django.core.mail import send_mail
+from django.http.response import JsonResponse
 from customer.models import Category, MenuItem, OrderModel
-from django.shortcuts import render
+from django.shortcuts import redirect,render
 from django.views import View
+import json
 # Create your views here.
 class Index(View):
     def get(self,request,*args,**kwargs):
@@ -40,7 +42,7 @@ class Order(View):
         email=request.POST.get('email')
         city=request.POST.get('city')
         state=request.POST.get('state')
-        zipCode=request.POST.get('zipCode')
+        zip_code = request.POST.get('zip')
         order_items = {
             'items': []
         }
@@ -70,7 +72,7 @@ class Order(View):
             email=email,
             city=city,
             state=state,
-            zipCode=zipCode,
+            zip_code=zip_code
 
 
         )
@@ -90,6 +92,38 @@ class Order(View):
             'items': order_items['items'],
             'price': price
         }
+        return redirect('order_confirmation',pk=order.pk)
+"""
+Adding a Confirmation view and redirect it as a Post request to a Url
+"""
+class OrderConfirmation(View):
+    def get(self, request, pk, *args, **kwargs):
+        order = OrderModel.objects.get(pk=pk)
+
+        context = {
+            'pk': order.pk,
+            'items': order.items,
+            'price': order.price,
+        }
 
         return render(request, 'customer/order_confirmation.html', context)
+
+    def post(self, request, pk, *args, **kwargs):
+        data = json.loads(request.body)
+
+        if data['isPaid']:
+            order = OrderModel.objects.get(pk=pk)
+            order.is_paid = True
+            order.save()
+
+        return redirect('payment-confirmation')
+
+class OrderPayConfirmation(View):
+    def get(self,request,*args,**kwargs):
+        return render(request,'customer/order_pay_confirmation.html')
+
+
+
+
+
   
