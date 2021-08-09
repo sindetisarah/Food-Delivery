@@ -25,5 +25,5 @@ urlpatterns = [
     path('about/',About.as_view(),name='about'),
     path('order/',Order.as_view() ,name='order'),
     path('order_confirmation/<int:pk>',OrderConfirmation.as_view(), name="order_confirmation"),
-    path('order_pay_confirmation/',OrderPayConfirmation.as_view(),name="order-confirmation")
+    path('order_pay_confirmation/',OrderPayConfirmation.as_view(),name="payment_submitted")
 ] + static(settings.MEDIA_URL,document_root=settings.MEDIA_ROOT)
