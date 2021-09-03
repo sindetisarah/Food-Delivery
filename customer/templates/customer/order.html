@@ -1,98 +1,168 @@
 {% extends 'customer/base.html' %}
 
 {% block content %}
+<!DOCTYPE html>
+<html lang="en">
+<head></head>
+<body>
+<style>
+    .container2 {
+            margin-top: 20px;
+            background-color: white;
+            margin-left: 10%;
+            width: 900px;
+            border:3px solid rgb(228, 10, 46);
+            box-shadow: 8px 8px 8px 9px rgba(248, 124, 124, 0.651);
+            border-radius: 10px;
+            margin-bottom: 20px;
+            padding-bottom: 20px;
+            padding-right: 40px;
+
+        }
+    .card{
+
+        padding-top: 40px;
+        padding-bottom: 10px;
+    border-radius: 4px solid;
+    background: rgba(248, 124, 124, 0.651);
+    box-shadow: 0 6px 10px rgba(245, 6, 6, 0.08), 0 0 6px rgba(235, 9, 9, 0.05);
+    transition: .3s transform cubic-bezier(.155,1.105,.295,1.12),.3s box-shadow,.3s -webkit-transform cubic-bezier(.155,1.105,.295,1.12);
+ 
+    cursor: pointer;
+    }
+    .card:hover{
+     transform: scale(1.05);
+    box-shadow: 0 10px 20px rgba(240, 3, 3, 0.12), 0 4px 8px rgba(245, 2, 2, 0.06);
+}
+    img{
+        margin-left: 50px;
+    }
+    #labeling{
+        text-align: center;
+    }
+    .form-group,#title,button{
+        margin-left:90px ;
+
+    }
+    #description{
+        margin-left: 110px;
+    }
+    #price{
+        padding-left: 10px;
+    }
+    
+</style>
+
 <div class="container mb-5">
     <div class="row justify-content-center mt-1">
         <div class="col-md-12 col-sm-12 p-4">
             <form method="POST">
                 {% csrf_token %}
                 <div class="pt-5">
-                    {% for app in appetizers %}
+
                     <div class="row">
-                        <div class="col-md-2 col-sm-12">
-                            <img class="rounded" src="{{ app.image.url }}" width="150" height="100" />
-                        </div>
-                        <div class="col-md-8 col-sm-12">
-                            <div class="d-flex flex-row">
-                                <div class="form-group form-check">
-                                    <input type="checkbox" name="items[]" class="form-check-input" value="{{ app.pk }}">
-                                    <label class="form-check-label">{{ app.name }}</label>
-                                </div>
-                                <p class="font-weight-bold pl-5">{{ app.price }}</p>
-                            </div>
-                            <p>{{ app.description }}</p>
-                        </div>
-                    </div>
-                    <hr />
-                    {% endfor %}
-                </div>
+                        {% for app in appetizers %}
+                        <div class="col-md-4">
+                            <div class="card" width="200">
+                                <img class="rounded" src="{{ app.image.url }}" width="250" height="150" />
 
-                <div class="pt-5">
+                                <div class="col-md-8 col-sm-12">
+                                    <div class="d-flex flex-row">
+                                        <div class="form-group form-check">
+                                            <input type="checkbox" name="items[]" class="form-check-input"
+                                                value="{{ app.pk }}">
+                                            <label id="labeling" class="form-check-label">{{ app.name }}</label>
+                                        </div>
+                                        <br>
+                                        <p  id="price" class="font-weight-bold pl-5">{{ app.price }}</p>
+                                    </div>
+                                    <p id="description">{{ app.description }}</p>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                <hr>
+
+                </div>
+                <div class="row">
                     {% for entre in entres %}
-                    <div class="row mt-4">
-                        <div class="col-md-2 col-sm-12">
-                            <img class="rounded" src="{{ entre.image.url }}" width="150" height="100" />
-                        </div>
-                        <div class="col-md-8 col-sm-12">
-                            <div class="d-flex flex-row">
-                                <div class="form-group form-check">
-                                    <input type="checkbox" name="items[]" class="form-check-input"
-                                        value="{{ entre.pk }}">
-                                    <label class="form-check-label">{{ entre.name }}</label>
+                    <div class="col-md-4">
+                        <div class="card" width="200">
+                            <img class="rounded" src="{{ entre.image.url }}" width="250" height="150" />
+
+                             
+                            <div class="col-md-8 col-sm-12">
+                                <div class="d-flex flex-row">
+                                    <div class="form-group form-check">
+                                        <input type="checkbox" name="items[]" class="form-check-input"
+                                            value="{{ entre.pk }}">
+                                        <label id="labeling" class="form-check-label">{{ entre.name }}</label>
+                                    </div>
+                                    <br>
+                                    <p  id="price" class="font-weight-bold pl-5">{{ entre.price }}</p>
                                 </div>
-                                <p class="font-weight-bold pl-5">{{ entre.price }}</p>
+                                <p id="description">{{ entre.description }}</p>
                             </div>
-                            <p>{{ entre.description }}</p>
                         </div>
                     </div>
-                    <hr />
                     {% endfor %}
                 </div>
+                <hr>
 
-                <div class="pt-5">
-                    {% for dessert in desserts %}
-                    <div class="row mt-4">
-                        <div class="col-md-2 col-sm-12">
-                            <img class="rounded" src="{{ dessert.image.url }}" width="150" height="100" />
-                        </div>
-                        <div class="col-md-8 col-sm-12">
-                            <div class="d-flex flex-row">
-                                <div class="form-group form-check">
-                                    <input type="checkbox" name="items[]" class="form-check-input"
-                                        value="{{ dessert.pk }}">
-                                    <label class="form-check-label">{{ dessert.name }}</label>
-                                </div>
-                                <p class="font-weight-bold pl-5">{{ dessert.price }}</p>
-                            </div>
-                            <p>{{ dessert.description }}</p>
-                        </div>
-                    </div>
-                    <hr />
-                    {% endfor %}
-                </div>
-
-                <div class="pt-5">
+                <div class="row">
                     {% for drink in drinks %}
-                    <div class="row mt-4">
-                        <div class="col-md-2 col-sm-12">
-                            <img class="rounded" src="{{ drink.image.url }}" width="150" height="100" />
-                        </div>
-                        <div class="col-md-8 col-sm-12">
-                            <div class="d-flex flex-row">
-                                <div class="form-group form-check">
-                                    <input type="checkbox" name="items[]" class="form-check-input"
-                                        value="{{ drink.pk }}">
-                                    <label class="form-check-label">{{ drink.name }}</label>
+                    <div class="col-md-4">
+                        <div class="card" width="200">
+                            <img class="rounded" src="{{ drink.image.url }}" width="250" height="150" />
+
+                             
+                            <div class="col-md-8 col-sm-12">
+                                <div class="d-flex flex-row">
+                                    <div class="form-group form-check">
+                                        <input type="checkbox" name="items[]" class="form-check-input"
+                                            value="{{ drink.pk }}">
+                                        <label id="labeling" class="form-check-label">{{ drink.name }}</label>
+                                    </div>
+                                    <br>
+                                    <p  id="price" class="font-weight-bold pl-5">{{ drink.price }}</p>
                                 </div>
-                                <p class="font-weight-bold pl-5">{{ drink.price }}</p>
+                                <p id="description">{{ drink.description }}</p>
                             </div>
-                            <p>{{ drink.description }}</p>
                         </div>
                     </div>
-                    <hr />
                     {% endfor %}
                 </div>
-                <p>Please fill the Form the form below to Complete your Order</p>
+                <hr>
+                <div class="row">
+                    {% for dessert in desserts %}
+                    <div class="col-md-4">
+                        <div class="card" width="200">
+                            <img class="rounded" src="{{ dessert.image.url }}" width="250" height="150" />
+
+                             
+                            <div class="col-md-8 col-sm-12">
+                                <div class="d-flex flex-row">
+                                    <div class="form-group form-check">
+                                        <input type="checkbox" name="items[]" class="form-check-input"
+                                            value="{{ dessert.pk }}">
+                                        <label id="labeling" class="form-check-label">{{ dessert.name }}</label>
+                                    </div>
+                                    <br>
+                                    <p  id="price" class="font-weight-bold pl-5">{{ dessert.price }}</p>
+                                </div>
+                                <p id="description">{{ dessert.description }}</p>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+              
+
+              
+
+               <div class="container2">
+                <p id ="title">Please fill the Form the form below to Complete your Order</p>
                 <div class="form-group pt-3">
                     <label for="name">Name</label>
                     <input required class="form-control" placeholder="Name" type="text" name="name">
@@ -128,8 +198,8 @@
                     Submit Order
                 </button>
                 <!-- Modal -->
-                <div class="modal fade" id="submitModal" tabindex="-1" role="dialog"
-                    aria-labelledby="submitModalLabel" aria-hidden="true">
+                <div class="modal fade" id="submitModal" tabindex="-1" role="dialog" aria-labelledby="submitModalLabel"
+                    aria-hidden="true">
                     <div class="modal-dialog" role="document">
                         <div class="modal-content">
                             <div class="modal-header">
@@ -138,7 +208,7 @@
                                     <span aria-hidden="true">&times;</span>
                                 </button>
                             </div>
-                            
+
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-light" data-dismiss="modal">Go Back</button>
                                 <!-- We change a button to submit when we wnat to post a request -->
@@ -146,8 +216,15 @@
                             </div>
                         </div>
                     </div>
-            </form>
+            </form></div>
         </div>
     </div>
 </div>
+
 {% endblock content %}
+
+
+
+<hr />
+</body>
+</html>
